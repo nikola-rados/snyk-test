@@ -9,7 +9,9 @@ jobs:
       - uses: actions/setup-go@v1
         with:
           go-version: '1.13'
-      - name: Snyk monitor
-        run: snyk test
+      - name: Build the Docker image
+        run: docker build . --file Dockerfile --tag localbuild/testimage:latest
+      - name: Snyk monitor localbuild/testimage:latest --file=Dockerfile
+        run: snyk container test
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
