@@ -16,7 +16,7 @@ jobs:
         SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
       with:
         image: local/image
-        args: --file=Dockerfile, --exclude-base-image-vulns
+        args: --file=Dockerfile --exclude-base-image-vulns
     - name: Upload result
       uses: github/codeql-action/upload-sarif@v1
       with:
