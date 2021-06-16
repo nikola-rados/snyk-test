@@ -12,6 +12,6 @@ jobs:
       - name: Build the Docker image
         run: docker build . --file Dockerfile --tag localbuild/testimage:latest
       - name: Snyk monitor
-        run: snyk container test localbuild/testimage:latest --file=Dockerfile
+        run: snyk container test localbuild/testimage:latest --file=Dockerfile --exclude-base-image-vulns
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
