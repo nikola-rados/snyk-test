@@ -1,18 +1,23 @@
-name: Snyk example
+name: Snyk Image Scan
+
 on: push
+
 jobs:
-  security:
+  snyk:
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@master
-      - uses: snyk/actions/setup@master
-        continue-on-error: true
-      - uses: actions/setup-go@v1
-        with:
-          go-version: '1.13'
-      - name: Build the Docker image
-        run: docker build . --file Dockerfile --tag localbuild/testimage:latest
-      - name: Snyk monitor
-        run: snyk container test localbuild/testimage:latest --file=Dockerfile --exclude-base-image-vulns
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+    - uses: actions/checkout@v2
+    - name: Build image
+      run: docker build -t local/image .
+    - name: Snyk vulnerability check
+      continue-on-error: true
+      uses: snyk/actions/docker@master
+      env:
+        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      with:
+        image: local/image
+        args: --file=Dockerfile
+    - name: Upload result
+      uses: github/codeql-action/upload-sarif@v1
+      with:
+        sarif_file: snyk.sarif
