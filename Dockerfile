@@ -11,5 +11,4 @@ RUN apt-get update && \
     strip --remove-section=.note.ABI-tag /usr/lib/x86_64-linux-gnu/libQt5Core.so.5 && \
     apt-get remove -y python3-urllib3 && \
     pip install -U pip && \
-    pip install . && \
     pip install gunicorn
